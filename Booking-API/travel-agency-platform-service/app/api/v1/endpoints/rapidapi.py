@@ -51,6 +51,7 @@ async def search_hotels(
     checkout_date: str = Query(..., description="Format: YYYY-MM-DD"),
     room_number: int = Query(1, ge=1),
     adults_number: int = Query(1, ge=1),
+    service: RapidApiService = Depends(get_rapidapi_service),
 ):
     try:
         return service.search_hotels(

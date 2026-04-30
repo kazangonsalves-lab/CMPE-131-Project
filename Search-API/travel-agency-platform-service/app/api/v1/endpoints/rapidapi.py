@@ -1,9 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
 
+from app.core.database import get_db
 from app.core.rapidapi_client import RapidApiError, get_rapidapi_client
+from app.services.price_history_service import PriceHistoryService, extract_flight_prices
 from app.services.rapidapi_service import RapidApiService
 
 router = APIRouter(prefix="", tags=["rapidapi"])
+
 
 def get_rapidapi_service() -> RapidApiService:
     return RapidApiService(get_rapidapi_client())
@@ -74,9 +78,10 @@ async def search_flights(
     market: str = Query("en-US"),
     return_date: str | None = Query(None, description="Format: YYYY-MM-DD"),
     service: RapidApiService = Depends(get_rapidapi_service),
+    db: Session = Depends(get_db),
 ):
     try:
-        return service.search_flights(
+        result = service.search_flights(
             origin_sky_id=origin_sky_id,
             origin_entity_id=origin_entity_id,
             destination_sky_id=destination_sky_id,
@@ -92,3 +97,9 @@ async def search_flights(
         )
     except RapidApiError as error:
         raise HTTPException(status_code=error.status_code, detail=error.detail) from error
+
+    records = extract_flight_prices(result, origin_sky_id, destination_sky_id, date, currency)
+    if records:
+        PriceHistoryService(db).record_many(records)
+
+    return result

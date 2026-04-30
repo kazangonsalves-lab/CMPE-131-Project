@@ -1,3 +1,4 @@
 # In app/models/__init__.py
 from .booking import User, Booking, HotelReservation, FlightReservation
 from .travel import Coordinates
+from .price_history import PriceHistory

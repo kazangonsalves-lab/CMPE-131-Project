@@ -59,6 +59,8 @@ class RapidApiClient:
         checkout_date: str,
         room_number: int,
         adults_number: int,
+        categories_filter_ids: str | None = None,
+        children_ages: str | None = None,
     ):
         querystring = {
             "page_number": str(page_number),

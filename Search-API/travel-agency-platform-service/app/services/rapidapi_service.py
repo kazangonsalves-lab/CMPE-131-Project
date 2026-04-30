@@ -74,6 +74,56 @@ class RapidApiService:
             return_date=return_date,
         )
 
+    def get_price_calendar(
+        self,
+        origin_sky_id: str,
+        destination_sky_id: str,
+        from_date: str,
+        market: str = "US",
+        currency: str = "USD",
+    ):
+        return self.rapidapi.get_price_calendar(
+            origin_sky_id=origin_sky_id,
+            destination_sky_id=destination_sky_id,
+            from_date=from_date,
+            market=market,
+            currency=currency,
+        )
+
+    def get_price_calendar_return(
+        self,
+        origin_sky_id: str,
+        destination_sky_id: str,
+        from_date: str,
+        return_from_date: str,
+        market: str = "US",
+        currency: str = "USD",
+    ):
+        return self.rapidapi.get_price_calendar_return(
+            origin_sky_id=origin_sky_id,
+            destination_sky_id=destination_sky_id,
+            from_date=from_date,
+            return_from_date=return_from_date,
+            market=market,
+            currency=currency,
+        )
+
+    def get_cheapest_oneway(
+        self,
+        origin_sky_id: str,
+        destination_sky_id: str,
+        month: str,
+        market: str = "US",
+        currency: str = "USD",
+    ):
+        return self.rapidapi.get_cheapest_oneway(
+            origin_sky_id=origin_sky_id,
+            destination_sky_id=destination_sky_id,
+            month=month,
+            market=market,
+            currency=currency,
+        )
+
     def search_rental_cars(
         self,
         pick_up_date: str,
